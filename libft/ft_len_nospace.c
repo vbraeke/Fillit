@@ -1,18 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar.c                                       :+:      :+:    :+:   */
+/*   ft_len_nospace.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/14 20:20:11 by jmontija          #+#    #+#             */
-/*   Updated: 2016/01/05 14:40:33 by jmontija         ###   ########.fr       */
+/*   Created: 2016/01/05 16:39:58 by jmontija          #+#    #+#             */
+/*   Updated: 2016/01/05 16:40:17 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putchar(char c)
+int		ft_len_nospace(const char *str)
 {
-	ft_putchar_fd(c, 1);
+	unsigned int space_len;
+	unsigned int len;
+	unsigned int i;
+
+	space_len = 0;
+	i = 0;
+	len = 0;
+	if (str)
+	{
+		len = ft_strlen(str);
+		while (str[i] && ft_isspace(str[i++]))
+			space_len++;
+		if (i < len)
+		{
+			i = len - 1;
+			while (str[i] && ft_isspace(str[i--]))
+				space_len++;
+		}
+	}
+	return (len - space_len);
 }

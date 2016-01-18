@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar.c                                       :+:      :+:    :+:   */
+/*   ft_ispunct.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/14 20:20:11 by jmontija          #+#    #+#             */
-/*   Updated: 2016/01/05 14:40:33 by jmontija         ###   ########.fr       */
+/*   Created: 2016/01/05 16:31:21 by jmontija          #+#    #+#             */
+/*   Updated: 2016/01/05 16:31:37 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putchar(char c)
+int		ft_ispunct(int c)
 {
-	ft_putchar_fd(c, 1);
+	if (ft_isprint(c) && !ft_isspace(c) && !ft_isalpha(c))
+		return (1);
+	return (0);
 }

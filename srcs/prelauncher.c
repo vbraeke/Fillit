@@ -6,69 +6,75 @@
 /*   By: julio <julio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/27 19:15:21 by jmontija          #+#    #+#             */
-/*   Updated: 2016/01/16 19:02:57 by vbraeke          ###   ########.fr       */
+/*   Updated: 2016/01/18 12:25:53 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-void	ft_get_map(group *grp)
+void	tetris_check(char *pac, int *count, int *valid, int dot_x)
 {
 	int i;
-	int j;
 
 	i = -1;
-	grp->map = (char **)malloc(sizeof(char *) * grp->mapLEN + 1);
-	while (++i < grp->mapLEN)
+	while (pac[++i])
 	{
-		j = -1;
-		grp->map[i] = (char *)malloc(sizeof(char) * grp->mapLEN + 1);
-		while (++j < grp->mapLEN)
-			grp->map[i][j] = '.';
-		grp->map[i][j] = '\0';
+		dot_x++;
+		*valid += 1;
+		if (pac[i] == '.' || pac[i] == '#' || pac[i] == '\n')
+		{
+			if (pac[i] == '\n')
+			{
+				dot_x > 5 ? ft_iserror() : 0;
+				dot_x = 0;
+			}
+			if (pac[i] == '\n' && (i + 1 - *count) % 5 != 0)
+			{
+				if ((pac[i + 1] != '.' && pac[i + 1] != '#') || (*valid != 21))
+					ft_iserror();
+				*valid = 0;
+				*count += 1;
+			}
+		}
+		else
+			ft_iserror();
 	}
-	grp->map[i] = NULL;
 }
-void		check_ifisvalid(char *pack, int i, int dot_x, int valid)
+
+void	tetris_dieze(char *pack, int count)
 {
-	if (pack[i] == '\n')
+	int i;
+	int diezes;
+
+	diezes = 0;
+	i = -1;
+	while (pack[++i])
 	{
-		if (dot_x > 5)
-			ft_iserror();
-		dot_x = 0;
+		if (pack[i] == '#')
+			diezes++;
+		if (pack[i] == '\n' && (i + 1 - count) % 5 != 0)
+		{
+			if (diezes != 4)
+				ft_iserror();
+			diezes = 0;
+			count++;
+		}
 	}
-	if (pack[i] == '\n' && (i + 1 - count) % 5 != 0)
-	{
-		if (pack[i + 1] != '.' && pack[i + 1] != '#')
-			ft_iserror();
-	}
+	if (diezes != 4)
+		ft_iserror();
 }
 
 int		tetris_count(char *pack)
 {
-	int	i;
 	int valid;
 	int dot_x;
 	int count;
 
 	dot_x = 0;
-	i = -1;
 	valid = 0;
 	count = 0;
-	while (pack[++i])
-	{
-		dot_x++;
-		valid++;
-		if (pack[i] == '.' || pack[i] == '#' || pack[i] == '\n')
-		{
-			check_ifisvalid(pack, i, dot_x, count);
-			
-			valid = 0;
-			count++;
-		}
-		else if(pack[i] != '.' && pack[i] != '#' && pack[i] != '\n')
-			ft_iserror();
-	}
+	tetris_dieze(pack, count);
+	tetris_check(pack, &count, &valid, dot_x);
 	count++;
 	if (valid + 1 != 21)
 		ft_iserror();
@@ -93,14 +99,14 @@ char	*ft_orc(char *file)
 
 void	pre_launcher(int argc, char **argv)
 {
-	group	*grp;
+	t_group	*grp;
 	char	*pack;
 
 	if (!(pack = ft_orc(argv[1])) || argc != 2)
 		ft_iserror();
 	grp = init();
 	grp->size = tetris_count(pack);
-	grp->mapLEN = 12;
+	grp->maplen = 12;
 	ft_get_map(grp);
 	launcher(grp, pack);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fillib.c                                           :+:      :+:    :+:   */
+/*   fillia.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julio <julio@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/02 00:02:15 by julio             #+#    #+#             */
-/*   Updated: 2016/01/16 14:52:56 by vbraeke          ###   ########.fr       */
+/*   Created: 2016/01/18 12:37:54 by jmontija          #+#    #+#             */
+/*   Updated: 2016/01/18 12:37:57 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ void	ft_iserror(void)
 {
 	ft_putstr("error\n");
 	exit(0);
+}
+
+void	check_next(char *pack, int p)
+{
+	while (pack[p] && pack[p] != '#')
+		p++;
+	if (getdiez(&pack[p]) != 4 && !getdiez(&pack[p + 5]))
+		ft_iserror();
 }
 
 int		count_dot_x(char *line)
@@ -28,84 +36,42 @@ int		count_dot_x(char *line)
 	return (i);
 }
 
-int		ft_allused(group *grp)
+void	coord_xy(t_group *grp, char **shape, int y)
 {
-	tetrim	*curr;
-	int		used;
-
-	curr = grp->premier;
-	used = 0;
-	while (curr != NULL)
-	{
-		if (curr->used)
-			used++;
-		curr = curr->next;
-	}
-	if (used == grp->size)
-		return (1);
-	return (0);
-}
-
-void	show_tetrim(group *grp)
-{
-	int		i;
-	int		j;
-	tetrim	*curr;
+	int	i;
+	int j;
 
 	i = -1;
-	j = 0;
-	if (!(grp))
-		exit(0);
-	curr = grp->premier;
-	while (curr != NULL)
+	j = -1;
+	while (++i < 4)
 	{
-		printf("SHAPE: %d\n", ++j);
-		while (curr->shape[++i])
-			printf("%d. %s\n", i + 1, curr->shape[i]);
-		i = -1;
-		printf("X= %d\n", curr->x);
-		printf("Y= %d\n", curr->y);
-		curr = curr->next;
-		printf("\n");
+		if (shape[i][0] == '\0')
+			shape[i] = NULL;
+		else
+		{
+			while (++j < 5)
+			{
+				if (i == 0 && ft_isalpha(shape[i][j]))
+					grp->curr->x += 1;
+			}
+			j = -1;
+		}
 	}
+	shape[i] = NULL;
+	grp->curr->y = y;
 }
 
-void	show_tab(char *name, char **tab)
+int		getdiez(char *line)
 {
 	int i;
+	int count;
 
 	i = -1;
-	printf("%s\n", name);
-	while (tab[++i])
-		printf("%d.\t%s\n", i + 1, tab[i]);
-}
-
-void	insert(group *grp, char id)
-{
-	tetrim	*new;
-
-	new = (tetrim *)malloc(sizeof(tetrim));
-	if (!(new))
-		exit(0);
-	new->id = id;
-	new->used = false;
-	new->next = NULL;
-	if (grp->curr != NULL)
-		grp->curr->next = new;
-	else
-		grp->premier = new;
-	grp->curr = new;
-}
-
-group	*init(void)
-{
-	group *grp;
-
-	grp = (group*)malloc(sizeof(group));
-	if (!(grp))
-		exit(0);
-	grp->premier = NULL;
-	grp->curr = NULL;
-	grp->save = NULL;
-	return (grp);
+	count = 0;
+	while (line[++i] != '\n')
+	{
+		if (line[i] == '#')
+			count++;
+	}
+	return (count);
 }

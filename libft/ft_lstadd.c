@@ -6,7 +6,7 @@
 /*   By: jmontija <jmontija@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 17:33:58 by jmontija          #+#    #+#             */
-/*   Updated: 2015/12/23 18:41:27 by jmontija         ###   ########.fr       */
+/*   Updated: 2016/01/05 14:20:13 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,4 @@ void	ft_lstadd(t_list **alst, t_list *new)
 	}
 	else
 		*alst = new;
-
 }

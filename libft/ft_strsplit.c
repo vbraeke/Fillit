@@ -6,13 +6,13 @@
 /*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 18:00:52 by jmontija          #+#    #+#             */
-/*   Updated: 2015/12/13 18:00:54 by jmontija         ###   ########.fr       */
+/*   Updated: 2016/01/05 15:21:14 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_fill(char const *s, char c, size_t idx, char *split)
+static void			ft_fill(char const *s, char c, size_t idx, char *split)
 {
 	unsigned int word;
 	unsigned int letter;
@@ -41,7 +41,7 @@ void	ft_fill(char const *s, char c, size_t idx, char *split)
 	}
 }
 
-unsigned int	ft_letter(char const *s, char c,size_t idx)
+unsigned int		ft_letter(char const *s, char c, size_t idx)
 {
 	unsigned int word;
 	unsigned int letter;
@@ -50,7 +50,7 @@ unsigned int	ft_letter(char const *s, char c,size_t idx)
 	word = 0;
 	letter = 0;
 	i = 0;
-	while (s[i] != '\0')
+	while (s[0] && s[i] != '\0')
 	{
 		if (s[i] != c)
 		{
@@ -64,78 +64,38 @@ unsigned int	ft_letter(char const *s, char c,size_t idx)
 		}
 		i++;
 	}
-	//printf("%zu letter\n", letter);
 	return (letter);
 }
 
-unsigned int ft_wordnb(char const *s, char c)
+static char			**ft_prefill(char const *s, char c)
 {
-	unsigned int word;
-	unsigned int i;
+	char			**split;
+	unsigned int	word;
+	unsigned int	letter;
+	unsigned int	i;
 
-	word 	= 0;
-	i 		= 0;
-	if (s && c)
+	i = -1;
+	word = ft_wordnb(s, c);
+	split = (char **)malloc(sizeof(char *) * (word + 1));
+	if (split)
+		split[word] = NULL;
+	else
+		return (NULL);
+	while (++i < word)
 	{
-		if (s[0] && s[0] != c)
-			word = 1;
+		letter = ft_letter(s, c, i);
+		split[i] = (char *)malloc(sizeof(char) * (letter + 1));
+		if (split[i])
+			ft_fill(s, c, i, split[i]);
 		else
-			word = 0;
-		i++;
-		while (s[0] && s[i] != '\0')
-		{
-			if (s[i - 1] == c && s[i] != c)
-				word++;
-			i++;
-		}
+			return (NULL);
 	}
-	return (word);
+	return (split);
 }
 
-char	**ft_strsplit(char const *s, char c)
+char				**ft_strsplit(char const *s, char c)
 {
-	char **split;
-	unsigned int  word;
-	unsigned int letter;
-	unsigned int i;
-
-	i = 0;
-	split = NULL;
-	if (s && c)
-	{
-		word = ft_wordnb(s, c);
-		//printf("%zu\n", word);
-		split = (char **)malloc(sizeof(char *) * word);
-		if (split == NULL)
-			return (NULL);
-		while (i < word)
-		{
-			letter = ft_letter(s, c, i);
-			split[i] = (char *)malloc(sizeof(char) * (letter + 1));
-			ft_fill(s, c, i, split[i]);
-			if (split[i] == NULL)
-				return (NULL);
-			i++;
-		}
-		return (split);
-	}
+	if (s)
+		return (ft_prefill(s, c));
 	return (NULL);
 }
-
-/*int main(void)
-{
-	char tosplit[] = "0salut0les**0etudiants0***";
-	char **split;
-
-	split = ft_strsplit(tosplit, '0');
-
-		printf("%s\n", split[0]);
-		printf("%s\n", split[1]);
-		printf("%s\n", split[2]);
-		printf("%s\n", split[3]);
-		printf("%s\n", split[4]);
-		printf("%s\n", split[5]);
-		printf("%s\n", split[6]);
-	
-	return (0);
-}*/

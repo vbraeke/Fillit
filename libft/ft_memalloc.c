@@ -17,7 +17,8 @@ void	*ft_memalloc(size_t size)
 	void *zone;
 
 	zone = (char *)malloc(sizeof(*zone) * size);
-	if (zone == NULL)
+	if (zone == NULL || size == 0)
 		return (NULL);
+	ft_memset(zone, 0, size);
 	return (zone);
 }

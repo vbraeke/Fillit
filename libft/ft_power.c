@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lennospace.c                                    :+:      :+:    :+:   */
+/*   ft_power.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 17:03:37 by jmontija          #+#    #+#             */
-/*   Updated: 2015/12/13 17:03:40 by jmontija         ###   ########.fr       */
+/*   Created: 2016/01/05 16:53:12 by jmontija          #+#    #+#             */
+/*   Updated: 2016/01/05 16:53:28 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t		ft_lennospace(char const *s)
+int		ft_power(int nb, int power)
 {
-	size_t len;
-	int i;
+	int total;
 
-	len = 0;
-	i = 0;
-	while (s[i] != '\0')
+	total = nb;
+	if (power > 1)
 	{
-		if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
-			len++;
-		i++;
+		while (power > 1)
+		{
+			total = total * nb;
+			power--;
+		}
 	}
-	return (len);
+	else if (power == 0)
+		return (1);
+	else
+		return (0);
+	return (total);
 }

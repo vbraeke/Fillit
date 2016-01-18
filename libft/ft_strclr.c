@@ -6,7 +6,7 @@
 /*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 21:09:07 by jmontija          #+#    #+#             */
-/*   Updated: 2015/12/11 21:09:09 by jmontija         ###   ########.fr       */
+/*   Updated: 2016/01/05 14:44:54 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	ft_strclr(char *s)
 {
-	ft_bzero(s, ft_strlen(s));
+	if (s)
+		ft_bzero(s, ft_strlen(s));
 }

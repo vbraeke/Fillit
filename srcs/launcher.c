@@ -6,88 +6,57 @@
 /*   By: julio <julio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/29 18:53:11 by julio             #+#    #+#             */
-/*   Updated: 2016/01/16 18:35:12 by vbraeke          ###   ########.fr       */
+/*   Updated: 2016/01/17 21:20:52 by julio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-void	coord_xy(group *grp, char **shape, int y)
+int			check_pos(t_tetrim *curr, char *pack, int *p, int y)
 {
-	int	i;
 	int j;
+	int x;
 
-	i = -1;
 	j = -1;
-	while (++i < 4)
+	x = 0;
+	while (++j < 5)
 	{
-		if (shape[i][0] == '\0')
-			shape[i] = NULL;
-		else
+		if (pack[*p] == '.' && getdiez(&pack[*p]) > 0 &&
+			((y > 0 && pack[*p - 5] == '#') ||
+			(y > 1 && (pack[*p - 5] == '#' || pack[*p - 10] == '#')) ||
+			(y < 3 && pack[*p + 5] == '#') ||
+			(y < 2 && (pack[*p + 5] == '#' || pack[*p + 10] == '#'))))
 		{
-			while (++j < 5)
-			{
-				if (i == 0 && ft_isalpha(shape[i][j]))
-					grp->curr->x += 1;
-			}
-			j = -1;
+			curr->shape[y][x] = pack[*p];
+			x++;
 		}
+		else if (pack[*p] == '#')
+		{
+			curr->shape[y][x] = curr->id;
+			x++;
+		}
+		*p += 1;
 	}
-	shape[i] = NULL;
-	grp->curr->y = y;
+	curr->shape[y][x] = '\0';
+	return (x);
 }
 
-int		getdiez(char *pack)
+void		fill_grp(char *pack, t_group *grp, int *p)
 {
-	int i;
-	int count;
-
-	i = -1;
-	count = 0;
-	while (pack[++i] != '\n')
-	{
-		if (pack[i] == '#')
-			count++;
-	}
-	return (count);
-}
-
-void	fill_grp(char *pack, group *grp, int *p)
-{
-	int		i;
-	int		j;
-	int		y;
-	int		x;
-	tetrim	*curr;
+	int			i;
+	int			y;
+	int			x;
+	t_tetrim	*curr;
 
 	i = -1;
 	y = 0;
 	curr = grp->curr;
 	curr->shape = (char **)malloc(sizeof(char *) * 5);
+	check_next(pack, *p);
 	while (++i < 4)
 	{
-		x = 0;
-		j = -1;
 		curr->shape[i] = (char *)malloc(sizeof(char) * 5);
-		while (++j < 5)
-		{
-			if (pack[*p] == '.' && getdiez(&pack[*p]) > 0 &&
-				((y > 0 && pack[*p - 5] == '#') ||
-				(y > 1 && (pack[*p - 5] == '#' || pack[*p - 10] == '#')) ||
-				(y < 3 && pack[*p + 5] == '#') ||
-				(y < 2 && (pack[*p + 5] == '#' || pack[*p + 10] == '#'))))
-			{
-				curr->shape[y][x] = pack[*p];
-				x++;
-			}
-			else if (pack[*p] == '#')
-			{
-				curr->shape[y][x] = curr->id;
-				x++;
-			}
-			*p += 1;
-		}
-		curr->shape[y][x] = '\0';
+		x = check_pos(curr, pack, p, y);
 		if (x != 0)
 			y++;
 	}
@@ -95,7 +64,7 @@ void	fill_grp(char *pack, group *grp, int *p)
 	coord_xy(grp, curr->shape, y);
 }
 
-int		check_sq(tetrim *curr, int i, int j, int count)
+int			check_sq(t_tetrim *curr, int i, int j, int count)
 {
 	if (curr->shape[i][j + 1] && ft_isalpha(curr->shape[i][j + 1]))
 		count++;
@@ -109,14 +78,13 @@ int		check_sq(tetrim *curr, int i, int j, int count)
 	return (count);
 }
 
-int		ft_check_tetrim(tetrim *curr)
+int			ft_check_t_tetrim(t_tetrim *curr)
 {
 	int	i;
 	int	j;
 	int	count;
 	int	alph;
 
-	printf("g");
 	i = -1;
 	count = 0;
 	alph = 0;
@@ -138,7 +106,7 @@ int		ft_check_tetrim(tetrim *curr)
 	return (0);
 }
 
-void	launcher(group *grp, char *pack)
+void		launcher(t_group *grp, char *pack)
 {
 	int i;
 	int p;
@@ -149,7 +117,7 @@ void	launcher(group *grp, char *pack)
 	{
 		insert(grp, ('A' + i));
 		fill_grp(pack, grp, &p);
-		if (!ft_check_tetrim(grp->curr))
+		if (!ft_check_t_tetrim(grp->curr))
 			ft_iserror();
 	}
 	ft_tracking(grp, grp->premier);

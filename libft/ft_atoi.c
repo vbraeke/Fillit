@@ -6,7 +6,7 @@
 /*   By: jmontija <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/15 18:14:37 by jmontija          #+#    #+#             */
-/*   Updated: 2015/12/15 18:14:39 by jmontija         ###   ########.fr       */
+/*   Updated: 2016/01/05 14:12:27 by jmontija         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int		ft_atoi(const char *str)
 	nbr = 0;
 	sign = 1;
 	i = 0;
-	while (str[i] && (str[i] == ' ' || str[i] == '\n' || str[i] == '\r' ||
-		str[i] == '\t' || str[i] == '\f' || str[i] == '\v'))
+	while (str[i] && ft_isspace(str[i]))
 		i++;
 	if (str[i] == '+')
 		i++;

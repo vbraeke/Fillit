@@ -12,36 +12,18 @@
 
 #include "libft.h"
 
-static int		ft_ismatch(const char *s1, const char *s2)
+char	*ft_strnstr(const char *big, const char *little, size_t n)
 {
-	int i;
+	size_t	litlen;
 
-	i = 0;
-	while (s2[i])
+	if (*little == '\0')
+		return ((char *)big);
+	litlen = ft_strlen(little);
+	while (*big != '\0' && n-- >= litlen)
 	{
-		if (s1[i] != s2[i])
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-
-char	*ft_strnstr(const char *s1, const char *s2, size_t n)
-{
-	size_t i;
-
-	i = 0;
-	if (s2[0] == '\0')
-		return ((char *)s1);
-	if (s1)
-	{
-		while (s1[i] != '\0' && i <= (n - ft_strlen(s2)))
-		{
-			if (ft_ismatch(&s1[i], s2))
-				return ((char *)s1 + i);
-			i++;
-		}
+		if (*big == *little && ft_strncmp(big, little, litlen) == 0)
+			return ((char *)big);
+		big++;
 	}
 	return (NULL);
 }

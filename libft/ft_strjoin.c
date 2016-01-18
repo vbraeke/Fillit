@@ -28,12 +28,3 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	return (NULL);
 }
-
-/*int		main(void)
-{
-	char str1[] = "first";
-	char str2[] = "second";
-
-	printf("%s\n", ft_strjoin(str1, str2));
-	return (0);
-}*/

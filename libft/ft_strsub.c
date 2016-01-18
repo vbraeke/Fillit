@@ -12,21 +12,6 @@
 
 #include "libft.h"
 
-/*char	*ft_strsub(char const *s, unsigned int start, size_t len)
-{
-	unsigned int i;
-	char const *cpy;
-
-	cpy = ft_strnew(len);
-	i = 0;
-	if (cpy)
-		return (ft_memcpy(cpy, s + start, len));
-	else
-		return (NULL);
-		return (NULL);
-}
-*/
-
 char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
 	char	*result;
